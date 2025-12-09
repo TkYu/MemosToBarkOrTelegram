@@ -39,7 +39,13 @@ namespace MemosToBarkOrTelegram.Services
             var memoUrl = _memosOptions.BuildMemoUrl(payload.Memo.Name);
 
             // Get username from creator ID
-            var creatorName = _memosOptions.GetUserName(payload.Creator);
+            var extract = payload.Creator;
+            if (extract.Contains('/'))
+            {
+                var parts = extract.Split('/');
+                extract = parts[^1];
+            }
+            var creatorName = _memosOptions.GetUserName(extract);
 
             var (title, body) = FormatMessage(payload, creatorName);
 
@@ -48,9 +54,9 @@ namespace MemosToBarkOrTelegram.Services
                     payload.ActivityType, creatorName, payload.Creator);
 
             // Send to both services in parallel, passing creatorId to filter recipients
-            var barkTask = barkService.SendNotificationAsync(title, body, payload.Creator, memoUrl);
+            var barkTask = barkService.SendNotificationAsync(title, body, extract, memoUrl);
             var telegramTask = telegramService.SendMessageAsync(
-                FormatTelegramMessage(title, body, payload.Memo), payload.Creator, memoUrl);
+                FormatTelegramMessage(title, body, payload.Memo), extract, memoUrl);
 
             // Wait for both to complete, but ignore results
             await Task.WhenAll(barkTask, telegramTask);

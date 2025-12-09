@@ -25,15 +25,9 @@ namespace MemosToBarkOrTelegram.Models
         /// </summary>
         public string GetUserName(string userId)
         {
-            var extract = userId;
-            if (userId.Contains('/'))
-            {
-                var parts = userId.Split('/');
-                extract = parts[^1];
-            }
             if (UserNameMap == null || UserNameMap.Count == 0)
                 return userId;
-            return UserNameMap.GetValueOrDefault(extract, extract);
+            return UserNameMap.GetValueOrDefault(userId, userId);
         }
 
         /// <summary>
