@@ -27,6 +27,14 @@ namespace MemosToBarkOrTelegram.Services
                 return;
             }
 
+            if (!_memosOptions.ContainsTemplate(payload.ActivityType))
+            {
+                if (logger.IsEnabled(LogLevel.Information))
+                    logger.LogInformation("No template defined for activity type '{ActivityType}', skipping memo forwarding",
+                        payload.ActivityType);
+                return;
+            }
+
             // Build memo URL
             var memoUrl = _memosOptions.BuildMemoUrl(payload.Memo.Name);
 
@@ -73,17 +81,18 @@ namespace MemosToBarkOrTelegram.Services
             }
             else
             {
-                // Fallback to default format
-                var activityType = payload.ActivityType switch
-                {
-                    "memo.created" => "New Memo",
-                    "memo.updated" => "Memo Updated",
-                    "memo.deleted" => "Memo Deleted",
-                    _ => "Memo Notify"
-                };
-
-                title = activityType;
-                body = memo.Content;
+                // // Fallback to default format
+                // var activityType = payload.ActivityType switch
+                // {
+                //     "memo.created" => "New Memo",
+                //     "memo.updated" => "Memo Updated",
+                //     "memo.deleted" => "Memo Deleted",
+                //     _ => "Memo Notify"
+                // };
+                //
+                // title = activityType;
+                // body = memo.Content;
+                return ("", "");// Skip if no template is defined
             }
 
             // Truncate body if too long for Bark

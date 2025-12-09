@@ -37,6 +37,16 @@ namespace MemosToBarkOrTelegram.Models
         }
 
         /// <summary>
+        /// Determines whether a message template exists for the specified event type.
+        /// </summary>
+        public bool ContainsTemplate(string eventType)
+        {
+            if (MessageTemplates == null || MessageTemplates.Count == 0)
+                return false;
+            return MessageTemplates.ContainsKey(eventType);
+        }
+
+        /// <summary>
         /// Get message template by event type
         /// </summary>
         public MessageTemplate? GetTemplate(string eventType)
