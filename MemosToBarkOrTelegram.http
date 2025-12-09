@@ -1,0 +1,32 @@
+@MemosToBarkOrTelegram_HostAddress = http://localhost:5237
+
+POST {{MemosToBarkOrTelegram_HostAddress}}/api/webhook/memos
+Accept: application/json
+Content-Type: application/json
+{
+  "url": "http://127.0.0.1:5237/api/webhook/memos",
+  "activityType": "memos.memo.updated",
+  "creator": "users/1",
+  "memo": {
+    "name": "memos/oooxxx",
+    "state": 1,
+    "creator": "users/1",
+    "create_time": {
+      "seconds": 1765229793
+    },
+    "update_time": {
+      "seconds": 1765237147
+    },
+    "display_time": {
+      "seconds": 1765229793
+    },
+    "content": "HelloWorld今日は #todo ",
+    "visibility": 2,
+    "tags": [
+      "todo"
+    ],
+    "property": {},
+    "snippet": "HelloWorld今日は"
+  }
+}
+###
